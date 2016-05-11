@@ -5,6 +5,7 @@ $logFiles = "C:\path\to\logs"
 $logArchive = "C:\path\to\archive"
 
 # Define for how many days we should retain logs in the archive location
+$logLimit = (Get-Date).AddDays(-90)
 
 # Stop the Apache HTTP Server service, using a wildcard to find it by name
 Get-Service -Name Apache* | Stop-Service
@@ -19,4 +20,5 @@ Get-ChildItem -Path $logFiles -Filter *.log | ForEach-Object {
 # Start the Apache HTTP Server service, again using a wildcard to find it
 Get-Service -Name Apache* | Start-Service
 
+# Delete log files older than the defined number of days
 Get-ChildItem -Path $logArchive | Where-Object {$_.CreationTime -lt $logLimit} | Remove-Item -Force
